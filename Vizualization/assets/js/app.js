@@ -167,13 +167,21 @@ function makeResponsive() {
     .then(function (acsData) {
 
       // Format or Parse the Data (Cast as Numbers)
-      acsData.forEach(function (data) {
-        data.poverty = +data.poverty;
-        data.age = +data.age;
-        data.income = +data.income;
-        data.healthcare = +data.healthcare;
-        data.obesity = +data.obesity;
-        data.smokes = +data.smokes;
+      // acsData.forEach(function (data) {
+      //   data.poverty = +data.poverty;
+      //   data.age = +data.age;
+      //   data.income = +data.income;
+      //   data.healthcare = +data.healthcare;
+      //   data.obesity = +data.obesity;
+      //   data.smokes = +data.smokes;
+
+      acsData.forEach(function (97points_wine_data) {
+        97points_wine_data.points = + 97points_wine_data.points;
+        97points_wine_data.price = + 97points_wine_data.price;
+        // 97points_wine_data.income = +data.income;
+        // 97points_wine_data.healthcare = +data.healthcare;
+        // 97points_wine_data.obesity = +data.obesity;
+        // 97points_wine_data.smokes = +data.smokes;
       });
 
       // Create xLinearScale & yLinearScale Functions for the Chart
@@ -223,40 +231,59 @@ function makeResponsive() {
       var xLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(${width / 2}, ${height + 20})`);
       // Append xAxis
-      var povertyLabel = xLabelsGroup.append("text")
+      // var povertyLabel = xLabelsGroup.append("text")
+      var pointsLabel = xLabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 20)
-        .attr("value", "poverty") // Value to Grab for Event Listener
+        // .attr("value", "poverty") // Value to Grab for Event Listener
+        // .classed("active", true)
+        // .text("Poverty (%)");
+        .attr("value", "points") // Value to Grab for Event Listener
         .classed("active", true)
-        .text("Poverty (%)");
+        .text("Points (%)");
 
-      var ageLabel = xLabelsGroup.append("text")
+      // var ageLabel = xLabelsGroup.append("text")
+      var priceLabel = xLabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 40)
-        .attr("value", "age") // Value to Grab for Event Listener
+        // .attr("value", "age") // Value to Grab for Event Listener
+        // .classed("inactive", true)
+        // .text("Age (Median)");
+        .attr("value", "price") // Value to Grab for Event Listener
         .classed("inactive", true)
-        .text("Age (Median)");
+        .text("Price (Median)");
 
-      var incomeLabel = xLabelsGroup.append("text")
-        .attr("x", 0)
-        .attr("y", 60)
-        .attr("value", "income") // Value to Grab for Event Listener
-        .classed("inactive", true)
-        .text("Household Income (Median)");
+      // var incomeLabel = xLabelsGroup.append("text")
+      //   .attr("x", 0)
+      //   .attr("y", 60)
+      //   .attr("value", "income") // Value to Grab for Event Listener
+      //   .classed("inactive", true)
+      //   .text("Household Income (Median)");
 
       // Create Group for 3 yAxis Labels
+     
       var yLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(-25, ${height / 2})`);
       // Append yAxis
-      var healthcareLabel = yLabelsGroup.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -30)
-        .attr("x", 0)
-        .attr("value", "healthcare")
-        .attr("dy", "1em")
-        .classed("axis-text", true)
-        .classed("active", true)
-        .text("Lacks Healthcare (%)");
+      // var healthcareLabel = yLabelsGroup.append("text")
+      //   .attr("transform", "rotate(-90)")
+      //   .attr("y", -30)
+      //   .attr("x", 0)
+      //   .attr("value", "healthcare")
+      //   .attr("dy", "1em")
+      //   .classed("axis-text", true)
+      //   .classed("active", true)
+      //   .text("Lacks Healthcare (%)");
+     // Append yAxis
+        var ratingLabel = yLabelsGroup.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", -30)
+          .attr("x", 0)
+          .attr("value", "price")
+          .attr("dy", "1em")
+          .classed("axis-text", true)
+          .classed("active", true)
+          .text("Point Rating (%)");
 
       var smokesLabel = yLabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
