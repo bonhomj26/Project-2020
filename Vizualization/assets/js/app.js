@@ -1,4 +1,4 @@
-// D3Times
+// Winery
 
 // Code for Chart is Wrapped Inside a Function That Automatically Resizes the Chart
 function makeResponsive() {
@@ -45,8 +45,8 @@ function makeResponsive() {
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
   // Initial Params
-  var chosenXAxis = "poverty";
-  var chosenYAxis = "healthcare";
+  var chosenXAxis = "price";
+  var chosenYAxis = "winery";
 
   // Function for Updating xScale Upon Click on Axis Label
   function xScale(acsData, chosenXAxis) {
@@ -113,23 +113,23 @@ function makeResponsive() {
   // Function for Updating Circles Group with New Tooltip
   function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup) {
 
-    if (chosenXAxis === "poverty") {
-      var xLabel = "Poverty (%)";
+    if (chosenXAxis === "price") {
+      var xLabel = "Price (Average)";
     }
-    else if (chosenXAxis === "age") {
-      var xLabel = "Age (Median)";
-    }
-    else {
-      var xLabel = "Household Income (Median)";
-    }
-    if (chosenYAxis === "healthcare") {
-      var yLabel = "Lacks Healthcare (%)";
-    }
-    else if (chosenYAxis === "obesity") {
-      var yLabel = "Obese (%)";
+    else if (chosenXAxis === "points") {
+      var xLabel = "Points (Average)";
     }
     else {
-      var yLabel = "Smokes (%)";
+      var xLabel = "Regions";
+    }
+    if (chosenYAxis === "winery") {
+      var yLabel = "Finest Wineries";
+    }
+    else if (chosenYAxis === "province") {
+      var yLabel = "Province";
+    }
+    else {
+      var yLabel = "World Wineries";
     }
 
     // Initialize Tool Tip
@@ -163,25 +163,17 @@ function makeResponsive() {
   }
 
   // Import Data from the data.csv File & Execute Everything Below
-  d3.csv("assets/data/data.csv")
+  d3.csv("Vizualization/assets/data/wine_data.csv")
     .then(function (acsData) {
 
-      // Format or Parse the Data (Cast as Numbers)
-      // acsData.forEach(function (data) {
-      //   data.poverty = +data.poverty;
-      //   data.age = +data.age;
-      //   data.income = +data.income;
-      //   data.healthcare = +data.healthcare;
-      //   data.obesity = +data.obesity;
-      //   data.smokes = +data.smokes;
-
-      acsData.forEach(function (97points_wine_data) {
-        97points_wine_data.points = + 97points_wine_data.points;
-        97points_wine_data.price = + 97points_wine_data.price;
-        // 97points_wine_data.income = +data.income;
-        // 97points_wine_data.healthcare = +data.healthcare;
-        // 97points_wine_data.obesity = +data.obesity;
-        // 97points_wine_data.smokes = +data.smokes;
+      //Format or Parse the Data (Cast as Numbers)
+      acsData.forEach(function (data) {
+        data.price = +data.price;
+        data.points = +data.points;
+        data.lat = +data.lat;
+        data.winery = +data.winery;
+        data.province = +data.province;
+        data.lng = +data.lng;
       });
 
       // Create xLinearScale & yLinearScale Functions for the Chart
@@ -231,79 +223,63 @@ function makeResponsive() {
       var xLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(${width / 2}, ${height + 20})`);
       // Append xAxis
-      // var povertyLabel = xLabelsGroup.append("text")
-      var pointsLabel = xLabelsGroup.append("text")
-        .attr("x", 0)
-        .attr("y", 20)
-        // .attr("value", "poverty") // Value to Grab for Event Listener
-        // .classed("active", true)
-        // .text("Poverty (%)");
-        .attr("value", "points") // Value to Grab for Event Listener
-        .classed("active", true)
-        .text("Points (%)");
-
-      // var ageLabel = xLabelsGroup.append("text")
       var priceLabel = xLabelsGroup.append("text")
         .attr("x", 0)
-        .attr("y", 40)
-        // .attr("value", "age") // Value to Grab for Event Listener
-        // .classed("inactive", true)
-        // .text("Age (Median)");
+        .attr("y", 20)
         .attr("value", "price") // Value to Grab for Event Listener
-        .classed("inactive", true)
-        .text("Price (Median)");
+        .classed("active", true)
+        .text("Price");
 
-      // var incomeLabel = xLabelsGroup.append("text")
-      //   .attr("x", 0)
-      //   .attr("y", 60)
-      //   .attr("value", "income") // Value to Grab for Event Listener
-      //   .classed("inactive", true)
-      //   .text("Household Income (Median)");
+       var pointsLabel = xLabelsGroup.append("text")
+      
+        .attr("x", 0)
+        .attr("y", 40)
+        .attr("value", "points") // Value to Grab for Event Listener
+        .classed("inactive", true)
+        .text("Points (Average)");
+
+      // var latLabel = xLabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 60)
+        .attr("value", "lat") // Value to Grab for Event Listener
+        .classed("inactive", true)
+        .text("Regions");
 
       // Create Group for 3 yAxis Labels
      
       var yLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(-25, ${height / 2})`);
-      // Append yAxis
-      // var healthcareLabel = yLabelsGroup.append("text")
-      //   .attr("transform", "rotate(-90)")
-      //   .attr("y", -30)
-      //   .attr("x", 0)
-      //   .attr("value", "healthcare")
-      //   .attr("dy", "1em")
-      //   .classed("axis-text", true)
-      //   .classed("active", true)
-      //   .text("Lacks Healthcare (%)");
-     // Append yAxis
-        var ratingLabel = yLabelsGroup.append("text")
+
+      //Append yAxis
+      var wineryLabel = yLabelsGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .attr("x", 0)
+        .attr("value", "winery")
+        .attr("dy", "1em")
+        .classed("axis-text", true)
+        .classed("active", true)
+        .text("Finest Wineries");
+     
+        var provinceLabel = yLabelsGroup.append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", -30)
           .attr("x", 0)
-          .attr("value", "price")
+          .attr("value", "province")
           .attr("dy", "1em")
           .classed("axis-text", true)
           .classed("active", true)
-          .text("Point Rating (%)");
+          .text("Province");
 
-      var smokesLabel = yLabelsGroup.append("text")
+      var lngLabel = yLabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", -50)
         .attr("x", 0)
-        .attr("value", "smokes")
+        .attr("value", "lng")
         .attr("dy", "1em")
         .classed("axis-text", true)
         .classed("inactive", true)
-        .text("Smokes (%)");
-
-      var obesityLabel = yLabelsGroup.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -70)
-        .attr("x", 0)
-        .attr("value", "obesity")
-        .attr("dy", "1em")
-        .classed("axis-text", true)
-        .classed("inactive", true)
-        .text("Obese (%)");
+        .text("World Wineries");
 
       // updateToolTip Function
       var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup);
@@ -327,36 +303,36 @@ function makeResponsive() {
             // Updates Tooltips with New Information
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup);
             // Changes Classes to Change Bold Text
-            if (chosenXAxis === "poverty") {
-              povertyLabel
+            if (chosenXAxis === "price") {
+              priceLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              ageLabel
+              pointsLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              incomeLabel
+              latLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
-            else if (chosenXAxis === "age") {
-              povertyLabel
+            else if (chosenXAxis === "points") {
+              priceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              ageLabel
+              pointsLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              incomeLabel
+              latLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
             else {
-              povertyLabel
+              priceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              ageLabel
+              pointsLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              incomeLabel
+              latLabel
                 .classed("active", true)
                 .classed("inactive", false);
             }
@@ -381,37 +357,38 @@ function makeResponsive() {
             textGroup = renderText(textGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis)
             // Updates Tooltips with New Information
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup);
+
             // Changes Classes to Change Bold Text
-            if (chosenYAxis === "healthcare") {
-              healthcareLabel
+            if (chosenYAxis === "winery") {
+              wineryLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              obesityLabel
+              provinceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              smokesLabel
+              lngLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
-            else if (chosenYAxis === "obesity") {
-              healthcareLabel
+            else if (chosenYAxis === "province") {
+              wineryLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              obesityLabel
+              provinceLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              incomeLabel
+              lngLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
             else {
-              healthcareLabel
+              wineryLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              obesityLabel
+              provinceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              smokesLabel
+              lngLabel
                 .classed("active", true)
                 .classed("inactive", false);
             }
