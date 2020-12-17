@@ -46,7 +46,7 @@ function makeResponsive() {
 
   // Initial Params
   var chosenXAxis = "price";
-  var chosenYAxis = "winery";
+  var chosenYAxis = "province";
 
   // Function for Updating xScale Upon Click on Axis Label
   function xScale(acsData, chosenXAxis) {
@@ -116,20 +116,20 @@ function makeResponsive() {
     if (chosenXAxis === "price") {
       var xLabel = "Price (Average)";
     }
-    else if (chosenXAxis === "points") {
-      var xLabel = "Points (Average)";
+    else if (chosenXAxis === "variety") {
+      var xLabel = "Variety";
     }
     else {
-      var xLabel = "Regions";
+      var xLabel = "Fine wine";
     }
-    if (chosenYAxis === "winery") {
-      var yLabel = "Finest Wineries";
+    if (chosenYAxis === "province") {
+      var yLabel = "Region";
     }
-    else if (chosenYAxis === "province") {
-      var yLabel = "Province";
+    else if (chosenYAxis === "lat") {
+      var yLabel = "Latitudes";
     }
     else {
-      var yLabel = "World Wineries";
+      var yLabel = "Longitudes";
     }
 
     // Initialize Tool Tip
@@ -163,16 +163,16 @@ function makeResponsive() {
   }
 
   // Import Data from the data.csv File & Execute Everything Below
-  d3.csv("Vizualization/assets/data/wine_data.csv")
+  d3.csv("assets/data/wine_data.csv")
     .then(function (acsData) {
 
       //Format or Parse the Data (Cast as Numbers)
       acsData.forEach(function (data) {
         data.price = +data.price;
-        data.points = +data.points;
-        data.lat = +data.lat;
+        data.variety = +data.variety;
         data.winery = +data.winery;
         data.province = +data.province;
+        data.lat = +data.lat;
         data.lng = +data.lng;
       });
 
@@ -196,7 +196,7 @@ function makeResponsive() {
         .call(leftAxis);
 
       // Create & Append Initial Circles
-      var circlesGroup = chartGroup.selectAll(".stateCircle")
+      var circlesGroup = chartGroup.selectAll(".countryCircle")
         .data(acsData)
         .enter()
         .append("circle")
@@ -207,14 +207,14 @@ function makeResponsive() {
         .attr("opacity", ".75");
 
       // Append Text to Circles
-      var textGroup = chartGroup.selectAll(".stateText")
+      var textGroup = chartGroup.selectAll(".countryText")
         .data(acsData)
         .enter()
         .append("text")
         .attr("x", d => xLinearScale(d[chosenXAxis]))
         .attr("y", d => yLinearScale(d[chosenYAxis] * .98))
         .text(d => (d.abbr))
-        .attr("class", "stateText")
+        .attr("class", "countryText")
         .attr("font-size", "12px")
         .attr("text-anchor", "middle")
         .attr("fill", "white");
@@ -230,20 +230,20 @@ function makeResponsive() {
         .classed("active", true)
         .text("Price");
 
-       var pointsLabel = xLabelsGroup.append("text")
+       var varietyLabel = xLabelsGroup.append("text")
       
         .attr("x", 0)
         .attr("y", 40)
-        .attr("value", "points") // Value to Grab for Event Listener
+        .attr("value", "variety") // Value to Grab for Event Listener
         .classed("inactive", true)
-        .text("Points (Average)");
+        .text("Variety");
 
-      // var latLabel = xLabelsGroup.append("text")
+      var wineryLabel = xLabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 60)
-        .attr("value", "lat") // Value to Grab for Event Listener
+        .attr("value", "winery") // Value to Grab for Event Listener
         .classed("inactive", true)
-        .text("Regions");
+        .text("Fine Wine");
 
       // Create Group for 3 yAxis Labels
      
@@ -251,35 +251,35 @@ function makeResponsive() {
         .attr("transform", `translate(-25, ${height / 2})`);
 
       //Append yAxis
-      var wineryLabel = yLabelsGroup.append("text")
+      var provinceLabel = yLabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", -30)
         .attr("x", 0)
-        .attr("value", "winery")
+        .attr("value", "province")
         .attr("dy", "1em")
         .classed("axis-text", true)
         .classed("active", true)
-        .text("Finest Wineries");
+        .text("Region");
      
-        var provinceLabel = yLabelsGroup.append("text")
+        var latLabel = yLabelsGroup.append("text")
           .attr("transform", "rotate(-90)")
-          .attr("y", -30)
+          .attr("y", -50)
           .attr("x", 0)
-          .attr("value", "province")
+          .attr("value", "lat")
           .attr("dy", "1em")
           .classed("axis-text", true)
           .classed("active", true)
-          .text("Province");
+          .text("Latitudes");
 
       var lngLabel = yLabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", -50)
+        .attr("y", -70)
         .attr("x", 0)
         .attr("value", "lng")
         .attr("dy", "1em")
         .classed("axis-text", true)
         .classed("inactive", true)
-        .text("World Wineries");
+        .text("Longitudes");
 
       // updateToolTip Function
       var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup);
@@ -307,21 +307,21 @@ function makeResponsive() {
               priceLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              pointsLabel
+              varietyLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              latLabel
+              wineryLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
-            else if (chosenXAxis === "points") {
+            else if (chosenXAxis === "variety") {
               priceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              pointsLabel
+              varietyLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              latLabel
+              wineryLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
@@ -329,10 +329,10 @@ function makeResponsive() {
               priceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              pointsLabel
+              varietyLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              latLabel
+              wineryLabel
                 .classed("active", true)
                 .classed("inactive", false);
             }
@@ -359,22 +359,22 @@ function makeResponsive() {
             circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, textGroup);
 
             // Changes Classes to Change Bold Text
-            if (chosenYAxis === "winery") {
-              wineryLabel
+            if (chosenYAxis === "province") {
+              provinceLabel
                 .classed("active", true)
                 .classed("inactive", false);
-              provinceLabel
+              latLabel
                 .classed("active", false)
                 .classed("inactive", true);
               lngLabel
                 .classed("active", false)
                 .classed("inactive", true);
             }
-            else if (chosenYAxis === "province") {
-              wineryLabel
+            else if (chosenYAxis === "lat") {
+              provinceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              provinceLabel
+              latLabel
                 .classed("active", true)
                 .classed("inactive", false);
               lngLabel
@@ -382,10 +382,10 @@ function makeResponsive() {
                 .classed("inactive", true);
             }
             else {
-              wineryLabel
+              provinceLabel
                 .classed("active", false)
                 .classed("inactive", true);
-              provinceLabel
+              latLabel
                 .classed("active", false)
                 .classed("inactive", true);
               lngLabel
