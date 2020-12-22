@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Project 2</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.0/papaparse.min.js"></script>
 </head>
@@ -13,8 +13,6 @@
     <canvas id="my-bubble-chart" width="1000" height="500"></canvas>
 
     <script>
-
-        // fetch('../Data/cities15000.csv')final_cleaned_wine.csv
         fetch('../final_cleaned_wine.csv')
             .then(response => response.text())
             .then((csv) => {
@@ -25,7 +23,6 @@
         function scaleR(value) {
             // const r = Math.floor(value / 10000);
             const r = Math.ceil(value);
-            //return r != 0 ? r / 10 : .25;
             return r != 0 ? r / 10 : .25;
         }
 
